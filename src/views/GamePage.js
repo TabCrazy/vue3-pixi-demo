@@ -4,9 +4,10 @@ import Plane from '../compomemts/Plane';
 import bulletSelf from '../compomemts/bullet';
 import EnemyPlane from '../compomemts/EnemyPlane';
 import { getGame } from '../Game'
+import { hitTestRectangle } from '../utils/index'
 
 export default defineComponent ({
-    setup() {
+    setup(props, ctx) {
         // 飞机
         const planeInfo = useCreatedPlane()
 
@@ -31,10 +32,16 @@ export default defineComponent ({
                 item.y -= bulletSpeed
             })
             // 碰撞检测
+            enemyPalnes.forEach(enemyPlaneItem => {
+                if (hitTestRectangle(enemyPlaneItem, planeInfo)) {
+                    console.log('碰了')
+                    ctx.emit('changePage', 'GameOver')
+                }
+            })
         })
         // 敌军
         const enemyPalnes = reactive([
-            {x: 10, y:10}
+            {x: 10, y:10, width: 308, height: 207}
         ])
 
         return { planeInfo, bullets, enemyPalnes, handlerAttack }
@@ -76,7 +83,9 @@ const useCreatedPlane = () => {
     // ref 处理值类型， reactive 处理对象类型[相比ref没有value]
     const planeInfo = reactive({
         x: 150,
-        y: 500
+        y: 500,
+        width: 258,
+        height: 364
     })
     const { x, y } = useMovePlane(planeInfo.x, planeInfo.y)
     planeInfo.x = x

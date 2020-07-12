@@ -1,19 +1,22 @@
 import { defineComponent, h, computed, ref } from '@vue/runtime-core'
 // import { getGame } from './Game'
-import StartPage from './views/Start'
+import GameStart from './views/GameStart'
 import GamePage from './views/GamePage'
+import GameOver from './views/GameOver'
 export default defineComponent({
     setup() {
         // ref 创建一个响应式对象
         // ref 值类型 Number String
-        const currPageName = ref('GamePage')
+        const currPageName = ref('GameStart')
         // 计算属性，依赖别的属性
         const currPage = computed(() => {
             // 非template视图，使用ref响应式对象需要通过value获取
-            if (currPageName.value === 'StartPage') {
-                return StartPage
+            if (currPageName.value === 'GameStart') {
+                return GameStart
             } else if (currPageName.value === 'GamePage') {
                 return GamePage
+            } else if (currPageName.value === 'GameOver') {
+                return GameOver
             }
         })
         return {
