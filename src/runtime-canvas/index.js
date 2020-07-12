@@ -42,7 +42,7 @@ const renderer = createRenderer({
     remove(el) {
         const parent = el.parent;
         if (parent) {
-        parent.removeChild(el);
+            parent.removeChild(el);
         }
     }
 })
