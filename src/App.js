@@ -6,7 +6,7 @@ export default defineComponent({
     setup() {
         // ref 创建一个响应式对象
         // ref 值类型 Number String
-        const currPageName = ref('StartPage')
+        const currPageName = ref('GamePage')
         // 计算属性，依赖别的属性
         const currPage = computed(() => {
             // 非template视图，使用ref响应式对象需要通过value获取

@@ -2,7 +2,7 @@
  * @Author: mikey.tabtang 
  * @Date: 2020-07-12 17:15:14 
  * @Last Modified by: mikey.tabtang
- * @Last Modified time: 2020-07-12 18:41:19
+ * @Last Modified time: 2020-07-12 21:46:02
  * @Name 启动页
  */
 import { defineComponent, h } from '@vue/runtime-core'
@@ -30,7 +30,7 @@ export default defineComponent ({
                 y: 513,
                 interactive: true, // pixi 必须开启此属性才能触发点击事件
                 onClick(){
-                    console.log('click button')
+                    // console.log('click button')
                     ctx.$emit('changePage', 'GamePage')
                 }
             })
