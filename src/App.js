@@ -1,33 +1,35 @@
-import { defineComponent, h, ref } from '@vue/runtime-core'
-import { getGame } from './Game'
+import { defineComponent, h, computed, ref } from '@vue/runtime-core'
+// import { getGame } from './Game'
+import StartPage from './views/Start'
+import GamePage from './views/GamePage'
 export default defineComponent({
     setup() {
-        const mapWidth = 750
-        const circleX = ref(100)
-        const speed = 15
-        let direction = 'Right'
-        getGame().ticker.add(() => {
-            console.log('0')
-            if (circleX.value >= 650) {
-                direction = 'Left'
-            } else if (circleX.value <= 100) {
-                direction = 'Right'
-            }
-            if (direction === 'Right') {
-                circleX.value += speed 
-            } else {
-                circleX.value -= speed
+        // ref 创建一个响应式对象
+        // ref 值类型 Number String
+        const currPageName = ref('StartPage')
+        // 计算属性，依赖别的属性
+        const currPage = computed(() => {
+            // 非template视图，使用ref响应式对象需要通过value获取
+            if (currPageName.value === 'StartPage') {
+                return StartPage
+            } else if (currPageName.value === 'GamePage') {
+                return GamePage
             }
         })
-        return {circleX}
+        return {
+            currPageName,
+            currPage
+        }
     },
     render(ctx) {
-        // 创建虚拟节点
-        // const vnode = h("circle", {x:150, y:150}, [
-        //     h("circle", {x: 400, y: 200}),
-        //     'TabTang'
-        // ])
-        const vnode = h("circle", {x: ctx.circleX, y:150})
-        return vnode
+        return h('Container', [h(ctx.currPage, {
+            // 子组件$emit事件changePage通过 on + ChangePage, 特别注意首字母大写
+            onChangePage(page) {
+                // console.log(page)
+                // 通过ctx拿到对应的上下文值
+                ctx.currPageName = page
+            }
+        })])
+        // return h('Container', [h(GamePage)])
     }
 })

@@ -1,27 +1,45 @@
 import { createRenderer } from '@vue/runtime-core'
-import { Graphics, Text } from 'pixi.js'
+import { Graphics, Text, Container, Sprite, Texture } from 'pixi.js'
 
 const renderer = createRenderer({
-    // 基于 type 入参 创建视图
+    // 基于 type 入参 通过【pixi.js】在canvas创建视图
     createElement(type) {
         let ele
-        console.log('------type----', type)
-        if (type === 'circle') {
-            ele = new Graphics()
-            ele.beginFill(0xff00ff, 1)
-            ele.drawCircle(0, 0, 100)
-            ele.endFill()
+        switch (type) {
+            case 'Container':
+                ele = new Container()
+                break;
+
+            case 'Sprite':
+                ele = new Sprite()
+                break;
+        
+            default:
+                console.log("Oh, error, undefined type")
+                break;
         }
         return ele
+    },
+    // 处理属性
+    patchProp(el, key, prevValue, nextValue) {
+        // console.log('---patchProp', el, key, prevValue, nextValue, '---patchProp end--')
+        switch (key) {
+            case 'texture':
+                // 设置图片属性
+                el.texture = Texture.from(nextValue)
+                break;
+            case 'onClick':
+                // pixi给元素注册点击事件
+                el.on('pointertap', nextValue)
+                break;
+            default:
+                el[key] = nextValue
+                break;
+        }
     },
     // 插入视图
     insert(el, parent) {
         parent.addChild(el)
-    },
-    // 处理属性
-    patchProp(el, key, prevValue, nextValue) {
-        console.log('---patchProp', el, key, prevValue, nextValue, '---patchProp end--')
-        el[key] = nextValue
     },
     // 设置节点文本
     setElementText(node, text) {
@@ -48,6 +66,6 @@ const renderer = createRenderer({
 })
 
 export function createApp(rootComponent) {
-    console.log('-----rootComponent-----', rootComponent)
+    // console.log('-----rootComponent-----', rootComponent)
     return renderer.createApp(rootComponent)
 }
